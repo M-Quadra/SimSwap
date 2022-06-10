@@ -8,12 +8,15 @@ class SpecificNorm(nn.Module):
             https://discuss.pytorch.org/t/encounter-the-runtimeerror-one-of-the-variables-needed-for-gradient-computation-has-been-modified-by-an-inplace-operation/836/3
         """
         super(SpecificNorm, self).__init__()
+
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
         self.mean = np.array([0.485, 0.456, 0.406])
-        self.mean = torch.from_numpy(self.mean).float().cuda()
+        self.mean = torch.from_numpy(self.mean).float().to(device)
         self.mean = self.mean.view([1, 3, 1, 1])
 
         self.std = np.array([0.229, 0.224, 0.225])
-        self.std = torch.from_numpy(self.std).float().cuda()
+        self.std = torch.from_numpy(self.std).float().to(device)
         self.std = self.std.view([1, 3, 1, 1])
 
     def forward(self, x):
